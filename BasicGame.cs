@@ -10,7 +10,7 @@ public class BasicGame : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    Color background = new Color(120, 120, 0, 50);
+    Color background;
 
     public BasicGame()
     {
@@ -45,6 +45,8 @@ public class BasicGame : Game
 
     protected override void Draw(GameTime gameTime)
     {
+        int redComponent = gameTime.TotalGameTime.Microseconds / 4;
+        background = new Color(redComponent, 0, 0);
         GraphicsDevice.Clear(background);
 
         // TODO: Add your drawing code here
