@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -10,8 +11,12 @@ public class BasicGame : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    Texture2D balloon, background;
-    Vector2 balloonPosition;
+    Texture2D balloon, background, cannonBarrel;
+    Vector2 balloonPosition, balloonOrigin;
+    Vector2 barrelPosition, barrelOrigin;
+    MouseState currentMouseState;
+    float angle;
+    double opposite, adjacent;
 
     public BasicGame()
     {
@@ -34,12 +39,19 @@ public class BasicGame : Game
         // TODO: use this.Content to load your game content here
         balloon = Content.Load<Texture2D>("spr_lives");
         background = Content.Load<Texture2D>("spr_background");
+        cannonBarrel = Content.Load<Texture2D>("spr_cannon_barrel");
         MediaPlayer.Play(Content.Load<Song>("snd_music"));
+        balloonOrigin = new Vector2(balloon.Width / 2, balloon.Height);
+        barrelPosition = new Vector2(72, 405);
+        barrelOrigin = new Vector2(cannonBarrel.Height, cannonBarrel.Height) / 2;
     }
 
     protected override void Update(GameTime gameTime)
     {
-        MouseState currentMouseState = Mouse.GetState();
+        currentMouseState = Mouse.GetState();
+        opposite = currentMouseState.Y - barrelPosition.Y;
+        adjacent = currentMouseState.X - barrelPosition.X;
+        angle = (float)Math.Atan2(opposite, adjacent);
 
         // TODO: Add your update logic here
         balloonPosition = new Vector2(currentMouseState.X, currentMouseState.Y);
@@ -54,7 +66,8 @@ public class BasicGame : Game
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
         _spriteBatch.Draw(background, Vector2.Zero, Color.White);
-        _spriteBatch.Draw(balloon, balloonPosition, Color.White);
+        _spriteBatch.Draw(cannonBarrel, barrelPosition, null, Color.White, angle, barrelOrigin, 1.0f, SpriteEffects.None, 0);
+        _spriteBatch.Draw(balloon, balloonPosition - balloonOrigin, Color.White);
         _spriteBatch.End();
 
         base.Draw(gameTime);
