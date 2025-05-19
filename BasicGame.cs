@@ -14,15 +14,18 @@ public class BasicGame : Game
     Texture2D balloon, background, cannonBarrel;
     Vector2 balloonPosition, balloonOrigin;
     Vector2 barrelPosition, barrelOrigin;
-    MouseState currentMouseState;
+    MouseState currentMouseState, previousMouseState;
     float angle;
     double opposite, adjacent;
+    bool calculateAngle;
+    bool mouseButtonClicked;
 
     public BasicGame()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        calculateAngle = false;
     }
 
     protected override void Initialize()
@@ -48,8 +51,14 @@ public class BasicGame : Game
 
     protected override void Update(GameTime gameTime)
     {
+        previousMouseState = currentMouseState;
         currentMouseState = Mouse.GetState();
-        if (currentMouseState.LeftButton == ButtonState.Pressed)
+
+        mouseButtonClicked = currentMouseState.LeftButton == ButtonState.Pressed
+            && previousMouseState.LeftButton == ButtonState.Released;
+        
+        if (mouseButtonClicked) calculateAngle = !calculateAngle;
+        if (calculateAngle)
         {
             opposite = currentMouseState.Y - barrelPosition.Y;
             adjacent = currentMouseState.X - barrelPosition.X;
@@ -57,7 +66,7 @@ public class BasicGame : Game
         }
         else
         {
-            angle = 0;
+            angle = 0.0f;
         }
 
         // TODO: Add your update logic here
