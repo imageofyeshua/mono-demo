@@ -49,9 +49,16 @@ public class BasicGame : Game
     protected override void Update(GameTime gameTime)
     {
         currentMouseState = Mouse.GetState();
-        opposite = currentMouseState.Y - barrelPosition.Y;
-        adjacent = currentMouseState.X - barrelPosition.X;
-        angle = (float)Math.Atan2(opposite, adjacent);
+        if (currentMouseState.LeftButton == ButtonState.Pressed)
+        {
+            opposite = currentMouseState.Y - barrelPosition.Y;
+            adjacent = currentMouseState.X - barrelPosition.X;
+            angle = (float)Math.Atan2(opposite, adjacent);
+        }
+        else
+        {
+            angle = 0;
+        }
 
         // TODO: Add your update logic here
         balloonPosition = new Vector2(currentMouseState.X, currentMouseState.Y);
