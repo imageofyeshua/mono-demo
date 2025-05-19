@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input;
 
 namespace mono_demo;
@@ -9,8 +10,7 @@ public class BasicGame : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-
-    Color background;
+    Texture2D balloon;
 
     public BasicGame()
     {
@@ -31,6 +31,9 @@ public class BasicGame : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
+        balloon = Content.Load<Texture2D>("spr_lives");
+
+        MediaPlayer.Play(Content.Load<Song>("snd_music"));
     }
 
     protected override void Update(GameTime gameTime)
@@ -45,11 +48,12 @@ public class BasicGame : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        int redComponent = gameTime.TotalGameTime.Microseconds / 4;
-        background = new Color(redComponent, 0, 0);
-        GraphicsDevice.Clear(background);
+        GraphicsDevice.Clear(Color.White);
 
         // TODO: Add your drawing code here
+        _spriteBatch.Begin();
+        _spriteBatch.Draw(balloon, Vector2.Zero, Color.White);
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }
