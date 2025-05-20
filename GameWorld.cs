@@ -37,4 +37,9 @@ public class GameWorld
         spriteBatch.End();
     }
 
+    public Cannon Cannon
+    {
+        get { return cannon; }
+    }
+
 }

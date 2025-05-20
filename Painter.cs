@@ -8,7 +8,7 @@ public class Painter : Game
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
     InputHelper inputHelper;
-    GameWorld gameWorld;
+    static GameWorld gameWorld;
 
     public Painter()
     {
@@ -16,6 +16,11 @@ public class Painter : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         inputHelper = new InputHelper();
+    }
+
+    public static GameWorld GameWorld
+    {
+        get { return gameWorld; }
     }
 
     protected override void Initialize()

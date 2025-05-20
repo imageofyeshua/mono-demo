@@ -32,7 +32,7 @@ public class Ball
 
     public void Update(GameTime gameTime)
     {
-
+        color = Painter.GameWorld.Cannon.Color;
     }
 
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
