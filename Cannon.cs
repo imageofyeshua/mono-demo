@@ -2,12 +2,17 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 public class Cannon
 {
     Texture2D cannonBarrel, colorRed, colorGreen, colorBlue;
     Vector2 barrelPosition, barrelOrigin, colorOrigin;
     Color currentColor;
+    bool mouseButtonClicked;
+    bool calculateAngle;
+    double opposite, adjacent;
+
     float angle;
     public Cannon(ContentManager Content)
     {
@@ -21,6 +26,7 @@ public class Cannon
         barrelOrigin = new Vector2(cannonBarrel.Height, cannonBarrel.Height) / 2;
         colorOrigin = new Vector2(colorRed.Width, colorRed.Height) / 2;
         barrelPosition = new Vector2(72, 405);
+        calculateAngle = false;
     }
 
     public void Reset()
@@ -49,7 +55,7 @@ public class Cannon
     public Color Color
     {
         get { return currentColor; }
-        set
+        private set
         {
             if (value != Color.Red && value != Color.Green && value != Color.Blue)
                 return;
@@ -66,5 +72,36 @@ public class Cannon
     {
         get { return angle; }
         set { angle = value; }
+    }
+
+    public void HandleInput(InputHelper inputHelper)
+    {
+        mouseButtonClicked = inputHelper.MouseLeftButtonPressed();
+        // TODO: Add your update logic here
+
+        if (mouseButtonClicked) calculateAngle = !calculateAngle;
+        if (calculateAngle)
+        {
+            opposite = inputHelper.MousePosition.Y - Position.Y;
+            adjacent = inputHelper.MousePosition.X - Position.X;
+            Angle = (float)Math.Atan2(opposite, adjacent);
+        }
+        else
+        {
+            Angle = 0.0f;
+        }
+
+        if (inputHelper.KeyPressed(Keys.R))
+        {
+            Color = Color.Red;
+        }
+        else if (inputHelper.KeyPressed(Keys.G))
+        {
+            Color = Color.Green;
+        }
+        else if (inputHelper.KeyPressed(Keys.B))
+        {
+            Color = Color.Blue;
+        }
     }
 }

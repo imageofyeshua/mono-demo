@@ -10,9 +10,6 @@ public class Painter : Game
     private SpriteBatch _spriteBatch;
     Texture2D balloon, background;
     Vector2 balloonPosition, balloonOrigin;
-    double opposite, adjacent;
-    bool calculateAngle;
-    bool mouseButtonClicked;
 
     Cannon cannon;
     InputHelper inputHelper;
@@ -22,7 +19,6 @@ public class Painter : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-        calculateAngle = false;
         inputHelper = new InputHelper();
     }
 
@@ -49,34 +45,7 @@ public class Painter : Game
     protected override void Update(GameTime gameTime)
     {
         inputHelper.Update();
-        mouseButtonClicked = inputHelper.MouseLeftButtonPressed();
-        // TODO: Add your update logic here
-
-        if (mouseButtonClicked) calculateAngle = !calculateAngle;
-        if (calculateAngle)
-        {
-            opposite = inputHelper.MousePosition.Y - cannon.Position.Y;
-            adjacent = inputHelper.MousePosition.X - cannon.Position.X;
-            cannon.Angle = (float)Math.Atan2(opposite, adjacent);
-        }
-        else
-        {
-            cannon.Angle = 0.0f;
-        }
-
-        if (inputHelper.KeyPressed(Keys.R))
-        {
-            cannon.Color = Color.Red;
-        }
-        else if (inputHelper.KeyPressed(Keys.G))
-        {
-            cannon.Color = Color.Green;
-        }
-        else if (inputHelper.KeyPressed(Keys.B))
-        {
-            cannon.Color = Color.Blue;
-        }
-
+        cannon.HandleInput(inputHelper);
         base.Update(gameTime);
     }
 
