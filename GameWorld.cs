@@ -8,12 +8,16 @@ public class GameWorld
     Texture2D background;
     Cannon cannon;
     Ball ball;
+    PaintCan can1, can2, can3;
 
     public GameWorld(ContentManager Content)
     {
         background = Content.Load<Texture2D>("spr_background");
         cannon = new Cannon(Content);
         ball = new Ball(Content);
+        can1 = new PaintCan(Content, 480.0f, Color.Red);
+        can2 = new PaintCan(Content, 610.0f, Color.Green);
+        can3 = new PaintCan(Content, 740.0f, Color.Blue);
     }
 
     public void HandleInput(InputHelper inputHelper)
@@ -26,6 +30,9 @@ public class GameWorld
     {
         cannon.Update(gameTime);
         ball.Update(gameTime);
+        can1.Update(gameTime);
+        can2.Update(gameTime);
+        can3.Update(gameTime);
     }
 
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -34,6 +41,9 @@ public class GameWorld
         spriteBatch.Draw(background, Vector2.Zero, Color.White);
         cannon.Draw(gameTime, spriteBatch);
         ball.Draw(gameTime, spriteBatch);
+        can1.Draw(gameTime, spriteBatch);
+        can2.Draw(gameTime, spriteBatch);
+        can3.Draw(gameTime, spriteBatch);
         spriteBatch.End();
     }
 
