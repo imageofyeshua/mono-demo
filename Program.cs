@@ -1,2 +1,2 @@
-﻿using var game = new mono_demo.BasicGame();
+﻿using var game = new Painter();
 game.Run();

@@ -4,27 +4,26 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input;
 
-public class BasicGame : Game
+public class Painter : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     Texture2D balloon, background;
-    Texture2D colorRed, colorGreen, colorBlue;
     Vector2 balloonPosition, balloonOrigin;
-    MouseState currentMouseState, previousMouseState;
-    KeyboardState currentKeyboardState, previousKeyboardState;
     double opposite, adjacent;
     bool calculateAngle;
     bool mouseButtonClicked;
 
     Cannon cannon;
+    InputHelper inputHelper;
 
-    public BasicGame()
+    public Painter()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         calculateAngle = false;
+        inputHelper = new InputHelper();
     }
 
     protected override void Initialize()
@@ -49,39 +48,33 @@ public class BasicGame : Game
 
     protected override void Update(GameTime gameTime)
     {
-        previousMouseState = currentMouseState;
-        previousKeyboardState = currentKeyboardState;
-        currentMouseState = Mouse.GetState();
-        currentKeyboardState = Keyboard.GetState();
-
-        mouseButtonClicked = currentMouseState.LeftButton == ButtonState.Pressed
-            && previousMouseState.LeftButton == ButtonState.Released;
-
+        inputHelper.Update();
+        mouseButtonClicked = inputHelper.MouseLeftButtonPressed();
         // TODO: Add your update logic here
 
         if (mouseButtonClicked) calculateAngle = !calculateAngle;
         if (calculateAngle)
         {
-            opposite = currentMouseState.Y - barrelPosition.Y;
-            adjacent = currentMouseState.X - barrelPosition.X;
-            angle = (float)Math.Atan2(opposite, adjacent);
+            opposite = inputHelper.MousePosition.Y - cannon.Position.Y;
+            adjacent = inputHelper.MousePosition.X - cannon.Position.X;
+            cannon.Angle = (float)Math.Atan2(opposite, adjacent);
         }
         else
         {
-            angle = 0.0f;
+            cannon.Angle = 0.0f;
         }
 
-        if (currentKeyboardState.IsKeyDown(Keys.R) && previousKeyboardState.IsKeyUp(Keys.R))
+        if (inputHelper.KeyPressed(Keys.R))
         {
-            currentColor = Color.Red;
+            cannon.Color = Color.Red;
         }
-        else if (currentKeyboardState.IsKeyDown(Keys.G) && previousKeyboardState.IsKeyUp(Keys.G))
+        else if (inputHelper.KeyPressed(Keys.G))
         {
-            currentColor = Color.Green;
+            cannon.Color = Color.Green;
         }
-        else if (currentKeyboardState.IsKeyDown(Keys.B) && previousKeyboardState.IsKeyUp(Keys.B))
+        else if (inputHelper.KeyPressed(Keys.B))
         {
-            currentColor = Color.Blue;
+            cannon.Color = Color.Blue;
         }
 
         base.Update(gameTime);
