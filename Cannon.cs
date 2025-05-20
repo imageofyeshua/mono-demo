@@ -68,6 +68,16 @@ public class Cannon
         get { return barrelPosition; }
     }
 
+    public Vector2 BallPosition
+    {
+        get
+        {
+            float opposite = (float)Math.Sin(angle) * cannonBarrel.Width * 0.75f;
+            float adjacent = (float)Math.Cos(angle) * cannonBarrel.Width * 0.75f;
+            return barrelPosition + new Vector2(adjacent, opposite);
+        }
+    }
+
     public float Angle
     {
         get { return angle; }

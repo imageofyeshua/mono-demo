@@ -33,6 +33,7 @@ public class Ball
     public void Update(GameTime gameTime)
     {
         color = Painter.GameWorld.Cannon.Color;
+        position = Painter.GameWorld.Cannon.BallPosition;
     }
 
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
