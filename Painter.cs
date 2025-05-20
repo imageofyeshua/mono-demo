@@ -7,9 +7,16 @@ public class Painter : Game
 {
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
-    static GameWorld gameWorld;
-    public static Vector2 ScreenSize { get; private set; }
     InputHelper inputHelper;
+
+    static GameWorld gameWorld;
+    public static GameWorld GameWorld
+    {
+        get { return gameWorld; }
+    }
+
+    public static Random Random { get; private set; }
+    public static Vector2 ScreenSize { get; private set; }
 
 
     public Painter()
@@ -18,12 +25,9 @@ public class Painter : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         inputHelper = new InputHelper();
+        Random = new Random();
     }
 
-    public static GameWorld GameWorld
-    {
-        get { return gameWorld; }
-    }
 
     protected override void Initialize()
     {
