@@ -104,4 +104,9 @@ public class Cannon
             Color = Color.Blue;
         }
     }
+
+    public void Update(GameTime gameTime)
+    {
+
+    }
 }
