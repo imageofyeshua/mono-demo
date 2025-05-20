@@ -7,8 +7,10 @@ public class Painter : Game
 {
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
-    InputHelper inputHelper;
     static GameWorld gameWorld;
+    public static Vector2 ScreenSize { get; private set; }
+    InputHelper inputHelper;
+
 
     public Painter()
     {
@@ -34,8 +36,7 @@ public class Painter : Game
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
         gameWorld = new GameWorld(Content);
-
-        // TODO: use this.Content to load your game content here
+        ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         // MediaPlayer.Play(Content.Load<Song>("snd_music"));
     }
 

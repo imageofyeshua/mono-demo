@@ -42,4 +42,9 @@ public class GameWorld
         get { return cannon; }
     }
 
+    public bool IsOutsideWorld(Vector2 position)
+    {
+        return position.X < 0 || position.X > Painter.ScreenSize.X || position.Y > Painter.ScreenSize.Y;
+    }
+
 }

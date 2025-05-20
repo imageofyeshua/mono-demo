@@ -34,7 +34,7 @@ public class Ball
         if (inputHelper.MouseLeftButtonPressed() && !shooting)
         {
             shooting = true;
-            velocity = new Vector2(200, 0);
+            velocity = (inputHelper.MousePosition - Painter.GameWorld.Cannon.Position) * 1.2f;
         }
     }
 
@@ -42,12 +42,18 @@ public class Ball
     {
         if (shooting)
         {
-            position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            velocity.Y += 400.0f * dt;
+            position += velocity * dt;
         }
         else
         {
             color = Painter.GameWorld.Cannon.Color;
             position = Painter.GameWorld.Cannon.BallPosition;
+        }
+        if (Painter.GameWorld.IsOutsideWorld(position))
+        {
+            Reset();
         }
     }
 

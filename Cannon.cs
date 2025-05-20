@@ -9,8 +9,6 @@ public class Cannon
     Texture2D cannonBarrel, colorRed, colorGreen, colorBlue;
     Vector2 barrelPosition, barrelOrigin, colorOrigin;
     Color currentColor;
-    bool mouseButtonClicked;
-    bool calculateAngle;
     double opposite, adjacent;
 
     float angle;
@@ -26,7 +24,6 @@ public class Cannon
         barrelOrigin = new Vector2(cannonBarrel.Height, cannonBarrel.Height) / 2;
         colorOrigin = new Vector2(colorRed.Width, colorRed.Height) / 2;
         barrelPosition = new Vector2(72, 405);
-        calculateAngle = false;
     }
 
     public void Reset()
@@ -86,21 +83,6 @@ public class Cannon
 
     public void HandleInput(InputHelper inputHelper)
     {
-        mouseButtonClicked = inputHelper.MouseLeftButtonPressed();
-        // TODO: Add your update logic here
-
-        if (mouseButtonClicked) calculateAngle = !calculateAngle;
-        if (calculateAngle)
-        {
-            opposite = inputHelper.MousePosition.Y - Position.Y;
-            adjacent = inputHelper.MousePosition.X - Position.X;
-            Angle = (float)Math.Atan2(opposite, adjacent);
-        }
-        else
-        {
-            Angle = 0.0f;
-        }
-
         if (inputHelper.KeyPressed(Keys.R))
         {
             Color = Color.Red;
@@ -113,6 +95,10 @@ public class Cannon
         {
             Color = Color.Blue;
         }
+
+        opposite = inputHelper.MousePosition.Y - barrelPosition.Y;
+        adjacent = inputHelper.MousePosition.X - barrelPosition.X;
+        Angle = (float)Math.Atan2(opposite, adjacent);
     }
 
     public void Update(GameTime gameTime)
