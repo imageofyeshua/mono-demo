@@ -9,6 +9,8 @@ public class Ball
     Texture2D colorRed, colorGreen, colorBlue;
     Vector2 origin, position;
     Color color;
+    bool shooting;
+    Vector2 velocity;
 
     public Ball(ContentManager Content)
     {
@@ -22,18 +24,31 @@ public class Ball
     public void Reset()
     {
         position = new Vector2(72, 405);
+        velocity = Vector2.Zero;
+        shooting = false;
         color = Color.Blue;
     }
 
     public void HandleInput(InputHelper inputHelper)
     {
-
+        if (inputHelper.MouseLeftButtonPressed() && !shooting)
+        {
+            shooting = true;
+            velocity = new Vector2(200, 0);
+        }
     }
 
     public void Update(GameTime gameTime)
     {
-        color = Painter.GameWorld.Cannon.Color;
-        position = Painter.GameWorld.Cannon.BallPosition;
+        if (shooting)
+        {
+            position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+        else
+        {
+            color = Painter.GameWorld.Cannon.Color;
+            position = Painter.GameWorld.Cannon.BallPosition;
+        }
     }
 
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
