@@ -2,10 +2,11 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 public class GameWorld
 {
-    Texture2D background, livesSprite;
+    Texture2D background, livesSprite, gameover;
     Cannon cannon;
     Ball ball;
     PaintCan can1, can2, can3;
@@ -15,6 +16,7 @@ public class GameWorld
     {
         background = Content.Load<Texture2D>("spr_background");
         livesSprite = Content.Load<Texture2D>("spr_lives");
+        gameover = Content.Load<Texture2D>("spr_gameover");
         cannon = new Cannon(Content);
         ball = new Ball(Content);
         can1 = new PaintCan(Content, 480.0f, Color.Red);
@@ -25,12 +27,17 @@ public class GameWorld
 
     public void HandleInput(InputHelper inputHelper)
     {
-        cannon.HandleInput(inputHelper);
-        ball.HandleInput(inputHelper);
+        if (!IsGameOver)
+        {
+            cannon.HandleInput(inputHelper);
+            ball.HandleInput(inputHelper);
+        }
+        else if (inputHelper.KeyPressed(Keys.Space)) Reset();
     }
 
     public void Update(GameTime gameTime)
     {
+        if (IsGameOver) return;
         cannon.Update(gameTime);
         ball.Update(gameTime);
         can1.Update(gameTime);
@@ -49,6 +56,11 @@ public class GameWorld
         can1.Draw(gameTime, spriteBatch);
         can2.Draw(gameTime, spriteBatch);
         can3.Draw(gameTime, spriteBatch);
+
+        if (IsGameOver)
+        {
+            spriteBatch.Draw(gameover, new Vector2(Painter.ScreenSize.X - gameover.Width, Painter.ScreenSize.Y - gameover.Height) / 2, Color.White);
+        }
         spriteBatch.End();
     }
 
@@ -70,6 +82,24 @@ public class GameWorld
     public void LoseLife()
     {
         lives--;
+    }
+
+    bool IsGameOver
+    {
+        get { return lives <= 0; }
+    }
+
+    void Reset()
+    {
+        lives = 5;
+        cannon.Reset();
+        ball.Reset();
+        can1.Reset();
+        can2.Reset();
+        can3.Reset();
+        can1.ResetMinSpeed();
+        can2.ResetMinSpeed();
+        can3.ResetMinSpeed();
     }
 
 }

@@ -74,6 +74,11 @@ public class PaintCan
         velocity = Vector2.Zero;
     }
 
+    public void ResetMinSpeed()
+    {
+        minSpeed = 30;
+    }
+
     Vector2 CalculateRandomVelocity()
     {
         return new Vector2(0.0f, (float)Painter.Random.NextDouble() * 30 + minSpeed);
