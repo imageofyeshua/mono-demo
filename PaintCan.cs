@@ -44,6 +44,12 @@ public class PaintCan
             velocity = CalculateRandomVelocity();
             color = CalculateRandomColor();
         }
+
+        if (BoundingBox.Intersects(Painter.GameWorld.Ball.BoundingBox))
+        {
+            Color = Painter.GameWorld.Ball.Color;
+            Painter.GameWorld.Ball.Reset();
+        }
     }
 
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -97,6 +103,16 @@ public class PaintCan
                 return;
             }
             color = value;
+        }
+    }
+
+    public Rectangle BoundingBox
+    {
+        get
+        {
+            Rectangle spriteBounds = colorRed.Bounds;
+            spriteBounds.Offset(position - origin);
+            return spriteBounds;
         }
     }
 }

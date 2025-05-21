@@ -69,4 +69,19 @@ public class Ball
 
         spriteBatch.Draw(currentSprite, position, null, Color.White, 0f, origin, 1.0f, SpriteEffects.None, 0);
     }
+
+    public Color Color
+    {
+        get { return color; }
+    }
+
+    public Rectangle BoundingBox
+    {
+        get
+        {
+            Rectangle spriteBounds = colorRed.Bounds;
+            spriteBounds.Offset(position - origin);
+            return spriteBounds;
+        }
+    }
 }
