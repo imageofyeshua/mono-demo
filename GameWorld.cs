@@ -5,19 +5,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class GameWorld
 {
-    Texture2D background;
+    Texture2D background, livesSprite;
     Cannon cannon;
     Ball ball;
     PaintCan can1, can2, can3;
+    int lives;
 
     public GameWorld(ContentManager Content)
     {
         background = Content.Load<Texture2D>("spr_background");
+        livesSprite = Content.Load<Texture2D>("spr_lives");
         cannon = new Cannon(Content);
         ball = new Ball(Content);
         can1 = new PaintCan(Content, 480.0f, Color.Red);
         can2 = new PaintCan(Content, 610.0f, Color.Green);
         can3 = new PaintCan(Content, 740.0f, Color.Blue);
+        lives = 5;
     }
 
     public void HandleInput(InputHelper inputHelper)
@@ -39,6 +42,8 @@ public class GameWorld
     {
         spriteBatch.Begin();
         spriteBatch.Draw(background, Vector2.Zero, Color.White);
+        for (int i = 0; i < lives; i++)
+            spriteBatch.Draw(livesSprite, new Vector2(i * livesSprite.Width + 15, 20), Color.White);
         cannon.Draw(gameTime, spriteBatch);
         ball.Draw(gameTime, spriteBatch);
         can1.Draw(gameTime, spriteBatch);
@@ -60,6 +65,11 @@ public class GameWorld
     public bool IsOutsideWorld(Vector2 position)
     {
         return position.X < 0 || position.X > Painter.ScreenSize.X || position.Y > Painter.ScreenSize.Y;
+    }
+
+    public void LoseLife()
+    {
+        lives--;
     }
 
 }

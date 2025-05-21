@@ -35,6 +35,8 @@ public class PaintCan
             // reset the can if it leaves the screen
             if (Painter.GameWorld.IsOutsideWorld(position - origin))
             {
+                if (Color != targetColor)
+                    Painter.GameWorld.LoseLife();
                 Reset();
             }
         }
