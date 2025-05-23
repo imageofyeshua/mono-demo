@@ -2,35 +2,35 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-public class PaintCan
+public class PaintCan : ThreeColorGameObject
 {
-    Texture2D colorRed, colorGreen, colorBlue;
-    Vector2 position, origin, velocity;
-    Color color, targetColor;
+    Color targetColor;
     float minSpeed;
 
-    public PaintCan(ContentManager Content, float positionOffset, Color target)
+    public PaintCan(ContentManager Content, float positionOffset, Color targetcol)
+        : base(Content, "spr_can_red", "spr_can_green", "spr_can_blue")
     {
-        colorRed = Content.Load<Texture2D>("spr_can_red");
-        colorGreen = Content.Load<Texture2D>("spr_can_green");
-        colorBlue = Content.Load<Texture2D>("spr_can_blue");
-        origin = new Vector2(colorRed.Width, colorRed.Height) / 2;
-
-        targetColor = target;
-        minSpeed = 30;
         position = new Vector2(positionOffset, -origin.Y);
-
-        Reset();
+        targetColor = targetcol;
+        minSpeed = 30;
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         minSpeed += 0.01f * dt;
 
+        base.Update(gameTime);
+
         if (velocity != Vector2.Zero)
         {
             position += velocity * dt;
+
+            if (BoundingBox.Intersects(Painter.GameWorld.Ball.BoundingBox))
+            {
+                Color = Painter.GameWorld.Ball.Color;
+                Painter.GameWorld.Ball.Reset();
+            }
 
             // reset the can if it leaves the screen
             if (Painter.GameWorld.IsOutsideWorld(position - origin))
@@ -44,32 +44,14 @@ public class PaintCan
         else if (Painter.Random.NextDouble() < 0.01)
         {
             velocity = CalculateRandomVelocity();
-            color = CalculateRandomColor();
+            Color = CalculateRandomColor();
         }
 
-        if (BoundingBox.Intersects(Painter.GameWorld.Ball.BoundingBox))
-        {
-            Color = Painter.GameWorld.Ball.Color;
-            Painter.GameWorld.Ball.Reset();
-        }
     }
 
-    public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+    public override void Reset()
     {
-        Texture2D currentSprite;
-        if (color == Color.Red)
-            currentSprite = colorRed;
-        else if (color == Color.Green)
-            currentSprite = colorGreen;
-        else
-            currentSprite = colorBlue;
-
-        spriteBatch.Draw(currentSprite, position, null, Color.White, 0f, origin, 1.0f, SpriteEffects.None, 0);
-    }
-
-    public void Reset()
-    {
-        color = Color.Blue;
+        base.Reset();
         position.Y = -origin.Y;
         velocity = Vector2.Zero;
     }
@@ -93,33 +75,5 @@ public class PaintCan
             return Color.Green;
         else
             return Color.Blue;
-    }
-
-    public Vector2 Position
-    {
-        get { return position; }
-    }
-
-    public Color Color
-    {
-        get { return color; }
-        set
-        {
-            if (value != Color.Red && value != Color.Green && value != Color.Blue)
-            {
-                return;
-            }
-            color = value;
-        }
-    }
-
-    public Rectangle BoundingBox
-    {
-        get
-        {
-            Rectangle spriteBounds = colorRed.Bounds;
-            spriteBounds.Offset(position - origin);
-            return spriteBounds;
-        }
     }
 }

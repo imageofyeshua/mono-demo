@@ -1,35 +1,25 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-public class Ball
+public class Ball : ThreeColorGameObject
 {
-    Texture2D colorRed, colorGreen, colorBlue;
-    Vector2 origin, position;
-    Color color;
     bool shooting;
-    Vector2 velocity;
 
     public Ball(ContentManager Content)
+        : base(Content, "spr_ball_red", "spr_ball_green", "spr_ball_blue")
     {
-        colorRed = Content.Load<Texture2D>("spr_ball_red");
-        colorGreen = Content.Load<Texture2D>("spr_ball_green");
-        colorBlue = Content.Load<Texture2D>("spr_ball_blue");
-        origin = new Vector2(colorRed.Width / 2.0f, colorRed.Height / 2.0f);
-        Reset();
     }
 
-    public void Reset()
+    public override void Reset()
     {
-        position = new Vector2(72, 405);
+        base.Reset();
         velocity = Vector2.Zero;
+        position = new Vector2(65, 390);
         shooting = false;
-        color = Color.Blue;
     }
 
-    public void HandleInput(InputHelper inputHelper)
+    public override void HandleInput(InputHelper inputHelper)
     {
         if (inputHelper.MouseLeftButtonPressed() && !shooting)
         {
@@ -38,50 +28,22 @@ public class Ball
         }
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         if (shooting)
         {
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            velocity.Y += 400.0f * dt;
-            position += velocity * dt;
+            velocity.Y += 400.0f * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            color = Painter.GameWorld.Cannon.Color;
+            Color = Painter.GameWorld.Cannon.Color;
             position = Painter.GameWorld.Cannon.BallPosition;
         }
         if (Painter.GameWorld.IsOutsideWorld(position))
         {
             Reset();
         }
-    }
 
-    public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-    {
-        Texture2D currentSprite;
-        if (color == Color.Red)
-            currentSprite = colorRed;
-        else if (color == Color.Green)
-            currentSprite = colorGreen;
-        else
-            currentSprite = colorBlue;
-
-        spriteBatch.Draw(currentSprite, position, null, Color.White, 0f, origin, 1.0f, SpriteEffects.None, 0);
-    }
-
-    public Color Color
-    {
-        get { return color; }
-    }
-
-    public Rectangle BoundingBox
-    {
-        get
-        {
-            Rectangle spriteBounds = colorRed.Bounds;
-            spriteBounds.Offset(position - origin);
-            return spriteBounds;
-        }
+        base.Update(gameTime);
     }
 }
