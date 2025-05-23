@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class ThreeColorGameObject
 {
-    Texture2D colorRed, colorGreen, colorBlue;
+    protected Texture2D colorRed, colorGreen, colorBlue;
     Color color;
-    Vector2 position, origin, velocity;
-    float rotation;
+    protected Vector2 position, origin, velocity;
+    protected float rotation;
 
-    public void Reset()
+    public virtual void Reset()
     {
         Color = Color.Blue;
     }
@@ -32,7 +32,7 @@ public class ThreeColorGameObject
     public Color Color
     {
         get { return color; }
-        set
+        protected set
         {
             if (value != Color.Red && value != Color.Green && value != Color.Blue)
             {
@@ -42,17 +42,17 @@ public class ThreeColorGameObject
         }
     }
 
-    public void HandlerInput(InputHelper inputHelper)
+    public virtual void HandleInput(InputHelper inputHelper)
     {
 
     }
 
-    public void Update(GameTime gameTime)
+    public virtual void Update(GameTime gameTime)
     {
         position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
     }
 
-    public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+    public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
         Texture2D currentSprite;
         if (Color == Color.Red)
@@ -66,7 +66,7 @@ public class ThreeColorGameObject
             rotation, origin, 1.0f, SpriteEffects.None, 0);
     }
 
-    public ThreeColorGameObject(ContentManager content,
+    protected ThreeColorGameObject(ContentManager content,
         string redSprite, string greenSprite, string blueSprite)
     {
         colorRed = content.Load<Texture2D>(redSprite);
