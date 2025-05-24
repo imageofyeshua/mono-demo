@@ -1,10 +1,13 @@
+using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 
 public class PaintCan : ThreeColorGameObject
 {
     Color targetColor;
     float minSpeed;
+    SoundEffect soundCollect;
 
     public PaintCan(ContentManager Content, float positionOffset, Color targetcol)
         : base(Content, "spr_can_red", "spr_can_green", "spr_can_blue")
@@ -12,12 +15,17 @@ public class PaintCan : ThreeColorGameObject
         position = new Vector2(positionOffset, -origin.Y);
         targetColor = targetcol;
         minSpeed = 30;
+
+        Reset();
+
+        soundCollect = Content.Load<SoundEffect>("snd_collect_points");
     }
 
     public override void Update(GameTime gameTime)
     {
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         minSpeed += 0.01f * dt;
+        rotation = (float)Math.Sin(position.Y / 50.0) * 0.05f;
 
         base.Update(gameTime);
 
@@ -36,6 +44,11 @@ public class PaintCan : ThreeColorGameObject
             {
                 if (Color != targetColor)
                     Painter.GameWorld.LoseLife();
+                else
+                {
+                    Painter.GameWorld.Score += 10;
+                    soundCollect.Play();
+                }
                 Reset();
             }
         }

@@ -13,11 +13,30 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin PainterFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:PainterFont.spritefont
+
+#begin snd_collect_points.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:snd_collect_points.wma
+
 #begin snd_music.wma
 /importer:WmaImporter
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:snd_music.wma
+
+#begin snd_shoot_paint.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:snd_shoot_paint.wav
 
 #begin spr_background.jpg
 /importer:TextureImporter
@@ -174,4 +193,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:spr_lives.png
+
+#begin spr_scorebar.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spr_scorebar.jpg
 

@@ -5,17 +5,23 @@ using Microsoft.Xna.Framework.Input;
 
 public class GameWorld
 {
-    Texture2D background, livesSprite, gameover;
+    Texture2D background, livesSprite, gameover, scoreBar;
+    SpriteFont gameFont;
     Cannon cannon;
     Ball ball;
     PaintCan can1, can2, can3;
     int lives;
 
+    public int Score { get; set; }
+
     public GameWorld(ContentManager Content)
     {
         background = Content.Load<Texture2D>("spr_background");
         livesSprite = Content.Load<Texture2D>("spr_lives");
+        scoreBar = Content.Load<Texture2D>("spr_scorebar");
         gameover = Content.Load<Texture2D>("spr_gameover");
+        gameFont = Content.Load<SpriteFont>("PainterFont");
+
         cannon = new Cannon(Content);
         ball = new Ball(Content);
         can1 = new PaintCan(Content, 480.0f, Color.Red);
@@ -47,14 +53,19 @@ public class GameWorld
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
         spriteBatch.Begin();
+
         spriteBatch.Draw(background, Vector2.Zero, Color.White);
-        for (int i = 0; i < lives; i++)
-            spriteBatch.Draw(livesSprite, new Vector2(i * livesSprite.Width + 15, 20), Color.White);
+        spriteBatch.Draw(scoreBar, new Vector2(10, 10), Color.White);
+        spriteBatch.DrawString(gameFont, "Score:" + Score, new Vector2(20, 18), Color.White);
+
         cannon.Draw(gameTime, spriteBatch);
         ball.Draw(gameTime, spriteBatch);
         can1.Draw(gameTime, spriteBatch);
         can2.Draw(gameTime, spriteBatch);
         can3.Draw(gameTime, spriteBatch);
+
+        for (int i = 0; i < lives; i++)
+            spriteBatch.Draw(livesSprite, new Vector2(i * livesSprite.Width + 15, 50), Color.White);
 
         if (IsGameOver)
         {
@@ -91,6 +102,8 @@ public class GameWorld
     void Reset()
     {
         lives = 5;
+        Score = 0;
+
         cannon.Reset();
         ball.Reset();
         can1.Reset();
